@@ -17,8 +17,8 @@ mix
     processCssUrls: false,
 })
 
-.js('src/app.js', 'js/custom.js')
-.sass('src/app.scss', 'css/modules/app.css');
+    .js('src/app.js', 'js/custom.js')
+    .sass('src/app.scss', 'css/custom.css');
 
 mix.browserSync({
     proxy: "http://example-university.local/",

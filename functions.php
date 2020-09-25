@@ -4,8 +4,6 @@ function university_files() {
     wp_enqueue_script('main-university-js', get_theme_file_uri('/js/scripts-bundled.js'),
     // microtime() is wordpress function which stops site from caching and forces it to load js again and again, and we don't use this on live server
     NULL, microtime(), true);
-    wp_enqueue_script('custom', get_stylesheet_directory_uri().'/js/custom.js', 
-    array(), false, true);
     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
     wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
     // microtime() forcing style.css to load everytime we refresh site and stops cahcing of the site
@@ -28,3 +26,4 @@ function university_features() {
 }
 
 add_action('after_setup_theme', 'university_features');
+
