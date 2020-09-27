@@ -35,7 +35,7 @@
                 <?php // making links on header clickable and if statement to add class to HTML element if the current page is About Us or if the children's page parent page is About Us?>
                 <li <?php if(is_page('about-us') or wp_get_post_parent_id(0) == 11) echo 'class="current-menu-item"'?>><a href="<?php echo site_url('/about-us')?>">About Us</a></li>
                 <li><a href="#">Programs</a></li>
-                <li <?php if(get_post_type() == 'event') echo 'class="current-menu-item"' ?>><a href="<?php echo get_post_type_archive_link('event');?>">Events</a></li>
+                <li <?php if(get_post_type() == 'event' OR is_page('past-events')) echo 'class="current-menu-item"' ?>><a href="<?php echo get_post_type_archive_link('event');?>">Events</a></li>
                 <li><a href="#">Campuses</a></li>
                 <li <?php if(get_post_type() == 'post') echo 'class="current-menu-item"'?>><a href="<?php echo site_url('/blog')?>">Blog</a></li>
               </ul>

@@ -13,7 +13,7 @@ function university_files() {
 add_action('wp_enqueue_scripts', 'university_files');
 
 
-// showing up pages name on browser's tab example: privacy policy, about us...
+// SHOWING UP PAGES NAME ON BROWSER'S TAB: PRIVACY POLICY, ABOUT US, EVENTS...
 function university_features() {
     /* 
     // making menus location in admin panel for menus we made
@@ -26,4 +26,29 @@ function university_features() {
 }
 
 add_action('after_setup_theme', 'university_features');
+
+
+
+// EDITING QUERY FOR ARCHIVE OF OUR CUSTOM POST TYPE WE MADE 'EVENTS'
+function university_adjust_queries($query) {
+    if (!is_admin() AND is_post_type_archive('event') AND $query->is_main_query()) {
+// what we did here is that we made conditions in if statement so only changed we made affect certein part of our site... !is_admin() stands for not affecting our adming dashboard, is_post_type_archive('event) means that changed will only occur on archive of our custom post type and $query->is_main_query() is third check which makes sure that changes will never affect our custom query and that it will only run in the url based query
+        $today = date('Ymd');
+        $query->set('meta_key', 'event_date');
+        $query->set('orderby', 'meta_value_num');
+        $query->set('order', 'ASC');
+        $query->set('meta_query', array(
+                array(
+                  'key' => 'event_date',
+                  'compare' => '>=',
+                  'value' => $today,
+                  'type' => 'numeric'
+                  // on english language it means only show us dates where event date is greater or equeal to today's date
+                )
+              ));
+    }
+}
+
+add_action('pre_get_posts', 'university_adjust_queries');
+
 
