@@ -29,10 +29,11 @@ add_action('after_setup_theme', 'university_features');
 
 
 
-// EDITING QUERY FOR ARCHIVE OF OUR CUSTOM POST TYPE WE MADE 'EVENTS'
+// EDITING DEFAULT QUERIES FOR CUSTOM POST TYPES AND THEIR ARCHIVES
 function university_adjust_queries($query) {
     if (!is_admin() AND is_post_type_archive('event') AND $query->is_main_query()) {
 // what we did here is that we made conditions in if statement so only changed we made affect certein part of our site... !is_admin() stands for not affecting our adming dashboard, is_post_type_archive('event) means that changed will only occur on archive of our custom post type and $query->is_main_query() is third check which makes sure that changes will never affect our custom query and that it will only run in the url based query
+// EVENT ARCHIVE QUERY
         $today = date('Ymd');
         $query->set('meta_key', 'event_date');
         $query->set('orderby', 'meta_value_num');
@@ -46,6 +47,13 @@ function university_adjust_queries($query) {
                   // on english language it means only show us dates where event date is greater or equeal to today's date
                 )
               ));
+    }
+
+// PROGRAMS ARCHIVE QUERY
+    if(!is_admin() AND is_post_type_archive('program') AND $query->is_main_query()) {
+        $query->set('orderby', 'title');
+        $query->set('order', 'ASC');
+        $query->set('posts_per_page', -1);
     }
 }
 

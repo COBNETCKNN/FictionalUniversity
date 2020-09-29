@@ -1,4 +1,8 @@
-<?php get_header(); ?>
+<?php get_header(); 
+
+// what we did here is that we made custom page for page we made in our admin dashboard for events that happened in the past... to make it connect with file we made, we just have to put slug of our page into the name of the file... in this case page-past-events.php 
+// further on we edited default WP query without making new, and this down there is example how to do it
+?>
 
   <div class="page-banner">
     <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg')?>);"></div>
@@ -55,7 +59,7 @@
 
     <?php
       }
-      // making paginaton of posts
+// making custom query pagination work which is different from default WP one
       echo paginate_links(array(
           'total' => $pastEvents->max_num_pages
       ));

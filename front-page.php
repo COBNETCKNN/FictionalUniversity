@@ -35,7 +35,7 @@
             $today = date('Ymd');
             $homepageEvents = new WP_Query(array(
               'posts_per_page' => 2,
-              // putting posts_per_page to -1 is PHP way for showing all posts on the frontend
+// putting posts_per_page to -1 is PHP way for showing all posts on the frontend
               'post_type' => 'event',
               'meta_key' => 'event_date',
               'orderby' => 'meta_value_num',
