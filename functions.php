@@ -13,7 +13,7 @@ function university_files() {
 add_action('wp_enqueue_scripts', 'university_files');
 
 
-// SHOWING UP PAGES NAME ON BROWSER'S TAB: PRIVACY POLICY, ABOUT US, EVENTS...
+// ENABLING FEATURES TO THE THEME
 function university_features() {
     /* 
     // making menus location in admin panel for menus we made
@@ -22,7 +22,10 @@ function university_features() {
     // new menu locations for footer
     register_nav_menu('footerLocationOne', 'Footer Location One');
     register_nav_menu('footerLocationTwo', 'Footer Location Two'); */
-    add_theme_support('title-tag');
+    add_theme_support('title-tag'); // showing title in the browser's tab
+    add_theme_support('post-thumbnails'); // enabling featured images
+    add_image_size('professorLandscape', 400, 260, true); // making custom sizes for featured images
+    add_image_size('professorPortrait', 480, 650, true);
 }
 
 add_action('after_setup_theme', 'university_features');
