@@ -24,11 +24,55 @@ function university_features() {
     register_nav_menu('footerLocationTwo', 'Footer Location Two'); */
     add_theme_support('title-tag'); // showing title in the browser's tab
     add_theme_support('post-thumbnails'); // enabling featured images
-    add_image_size('professorLandscape', 400, 260, true); // making custom sizes for featured images
+    add_image_size( 'professorLandscape', 220, 220, true); // making custom sizes for featured images
     add_image_size('professorPortrait', 480, 650, true);
+    add_image_size('pageBanner', 1500,350, true);
 }
 
 add_action('after_setup_theme', 'university_features');
+
+// MAKING REAUSABLE FUNCTIONS
+
+// $args = NULL means that argument will be optional not required which would be if there is no NULL
+function pageBanner($args = NULL) {
+    
+    if(!$args['title']) {
+        $args['title'] = get_the_title();
+    }
+// if no title was not provided just pull the wordpress page title
+
+    if(!$args['subtitle']) {
+        $args['subtitle'] = get_field('page_banner_subtitle');
+    }
+// making argument for subtitle, so if it's not provided as a fallback it will use custom field one
+
+    if(!$args['photo']) {
+        if(get_field('page_banner_background_image')) {
+            $args['photo'] = get_field('page_banner_background_image')['sizes']['pageBanner'];
+        } else {
+            $args['photo'] = get_theme_file_uri('/images/ocean.jpg');
+        }
+    }
+// what we did here is that we nested if statement inside on, so if there is no background image provided by us wordpress will use one uploaded by client, further if there is no image uploaded by client wordpress will use image provided by us from img directory in our there folder
+
+    ?>
+
+        <div class="page-banner">
+            <div class="page-banner__bg-image" style="background-image: url(<?php echo $args['photo'] ?>);"></div>
+            <div class="page-banner__content container container--narrow">
+                <h1 class="page-banner__title"><?php echo $args['title'] ?></h1>
+                <div class="page-banner__intro">
+                <p><?php echo $args['subtitle'] ?></p>
+                </div>
+            </div>  
+        </div>
+
+    <?php
+}
+
+
+
+
 
 
 
