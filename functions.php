@@ -8,6 +8,7 @@ function university_files() {
     wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
     // microtime() forcing style.css to load everytime we refresh site and stops cahcing of the site
     wp_enqueue_style('university_main_styles', get_stylesheet_uri(), NULL, microtime());
+
 }
 
 add_action('wp_enqueue_scripts', 'university_files');
@@ -105,5 +106,13 @@ function university_adjust_queries($query) {
 }
 
 add_action('pre_get_posts', 'university_adjust_queries');
+
+
+
+function universityMapKey( $api ){
+    $api['key'] = 'AIzaSyDcwhTWstJ3oyaiIP7r35Jj6UcokbM37Bs';
+    return $api;
+}
+add_filter('acf/fields/google_map/api', 'universityMapKey');
 
 

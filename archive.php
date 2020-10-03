@@ -1,34 +1,10 @@
-<?php get_header(); ?>
+<?php get_header(); 
 
-  <div class="page-banner">
-    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg')?>);"></div>
-    <div class="page-banner__content container container--narrow">
-      <h1 class="page-banner__title">
-
-      <?php 
-      // more modern and static way of sorting out archive which is done by one wordpress function
-
-      the_archive_title(); ?>
-
-      <?php 
-      // more complex and more customizable way of doing archive
-
-      /*
-        if(is_category()) {
-        // getting the category name to display as a title
-            single_cat_title();
-      }
-        if(is_author()) {
-        // getting the name of the autor to display as a title
-           echo 'Posts by '; the_author();
-        }
-      */?>
-      </h1>
-      <div class="page-banner__intro">
-        <p><?php the_archive_description(); ?></p>
-      </div>
-    </div>  
-  </div>
+pageBanner(array(
+  'title' => get_the_archive_title(),
+  'subtitle' => get_the_archive_description(),
+));
+?>
 
   <div class="container container--narrow page-section">
     <?php // we use while loop because we want to do something once for each blog post
