@@ -38,7 +38,7 @@ pageBanner(array(
 </section>
 	
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPCzVJ5iYP7vZM52Bms86A5p1KRIg5Z2I"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=APIKEY"></script>
 
 <script>
     jQuery(document).ready(function($){

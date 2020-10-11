@@ -117,7 +117,7 @@ add_action('pre_get_posts', 'university_adjust_queries');
 
 
 function my_acf_init() {
-    acf_update_setting('google_api_key', 'AIzaSyDPCzVJ5iYP7vZM52Bms86A5p1KRIg5Z2I');
+    acf_update_setting('google_api_key', 'APIKEY');
 }
 add_action('acf/init', 'my_acf_init');
 
