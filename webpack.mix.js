@@ -13,9 +13,9 @@ let mix = require('laravel-mix');
 
 mix
 
-.options({
-    processCssUrls: false,
-})
+    .options({
+        processCssUrls: false,
+    })
 
     .js('src/app.js', 'js/custom.js')
     .sass('src/app.scss', 'css/custom.css');

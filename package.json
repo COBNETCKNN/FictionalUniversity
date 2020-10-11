@@ -3,6 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "browser-sync-webpack-plugin": "^2.0.1",
+    "leaflet": "^1.7.1",
+    "sass": "^1.26.11",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "laravel-mix": "^5.0.6"
+  },
   "scripts": {
     "dev": "npm run development",
     "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
@@ -21,16 +33,5 @@
   "bugs": {
     "url": "https://github.com/COBNETCKNN/FictionalUniversity/issues"
   },
-  "homepage": "https://github.com/COBNETCKNN/FictionalUniversity#readme",
-  "devDependencies": {
-    "browser-sync-webpack-plugin": "^2.0.1",
-    "cross-env": "^7.0.2",
-    "laravel-mix": "^5.0.5",
-    "sass": "^1.26.11",
-    "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.12"
-  },
-  "dependencies": {
-    "bootstrap": "^4.5.2"
-  }
+  "homepage": "https://github.com/COBNETCKNN/FictionalUniversity#readme"
 }

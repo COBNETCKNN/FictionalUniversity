@@ -11,9 +11,7 @@ pageBanner(array(
     <?php // we use while loop because we want to do something once for each blog post
       while(have_posts()) {
         the_post(); 
-
         get_template_part('template-parts/content-event');
-
       }
       echo paginate_links();
     ?>
