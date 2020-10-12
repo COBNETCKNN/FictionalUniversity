@@ -2,8 +2,6 @@
 
 function university_files() {
 
-    wp_enqueue_script('googleMap', 'https://maps.googleapis.com/maps/api/js?key=API KEY', NULL, '1.0', true);
-    wp_enqueue_script('googleMapsJS', get_template_directory_uri() . '/js/custom.js', NULL, '1.0', true);
     wp_enqueue_script('custom.js', get_template_directory_uri() . '/src/app.js');
     wp_enqueue_script('main-university-js', get_theme_file_uri('/js/scripts-bundled.js'),
     // microtime() is wordpress function which stops site from caching and forces it to load js again and again, and we don't use this on live server
@@ -116,9 +114,5 @@ function university_adjust_queries($query) {
 add_action('pre_get_posts', 'university_adjust_queries');
 
 
-function my_acf_init() {
-    acf_update_setting('google_api_key', 'APIKEY');
-}
-add_action('acf/init', 'my_acf_init');
 
 
