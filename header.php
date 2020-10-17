@@ -25,8 +25,7 @@
 
         <?php
       } ?>
-
-      
+            
   </head>
   <?php // wordpress function for making classes for every page we have so we can use them in CSS and JS ?>
   <body <?php body_class(); ?>>

@@ -2,10 +2,10 @@
 
 function university_files() {
 
-    wp_enqueue_script('custom.js', get_template_directory_uri() . '/src/app.js');
+    wp_enqueue_script('customJS', get_stylesheet_directory_uri() . '/js/custom.js', array('jquery'), '1.0.0', true);
     wp_enqueue_script('main-university-js', get_theme_file_uri('/js/scripts-bundled.js'),
     // microtime() is wordpress function which stops site from caching and forces it to load js again and again, and we don't use this on live server
-    NULL, microtime(), true);
+    array('jquery'), microtime(), true);
 
     wp_enqueue_style('customCSS', get_template_directory_uri() . '/css/custom.css');
     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
@@ -77,12 +77,6 @@ function pageBanner($args = NULL) {
     <?php
 }
 
-
-
-
-
-
-
 // EDITING DEFAULT QUERIES FOR CUSTOM POST TYPES AND THEIR ARCHIVES
 function university_adjust_queries($query) {
     if (!is_admin() AND is_post_type_archive('event') AND $query->is_main_query()) {
@@ -107,12 +101,13 @@ function university_adjust_queries($query) {
     if(!is_admin() AND is_post_type_archive('program') AND $query->is_main_query()) {
         $query->set('orderby', 'title');
         $query->set('order', 'ASC');
-        $query->set('posts_per_page', -1);
+        $query->set('posts_per_page', 500);
+    }
+
+// CAMPUSES ARCHIVE QUERY
+ if(!is_admin() AND is_post_type_archive('campus') AND $query->is_main_query()) {
+        $query->set('posts_per_page', 500);
     }
 }
 
 add_action('pre_get_posts', 'university_adjust_queries');
-
-
-
-

@@ -12,20 +12,21 @@
 let mix = require('laravel-mix');
 const tailwindcss = require('tailwindcss');
 
-mix
-
-    .options({
-        processCssUrls: false,
-        postCss: [tailwindcss('./tailwind.config.js')],
+mix.options({
+    processCssUrls: false,
+    postCss: [tailwindcss('./tailwind.config.js')],
     })
 
     .js('src/app.js', 'js/custom.js')
+    .babel('src/app.js', 'js/custom.js')
     .sass('src/app.scss', 'css/custom.css');
 
 mix.browserSync({
     proxy: "http://example-university.local/",
     files: ["./**/*"],
 });
+
+
 
 // Full API
 // mix.js(src, output);
