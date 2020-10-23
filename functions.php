@@ -1,5 +1,18 @@
 <?php  
 
+// we made seperate .php file in our includes folder so our code looks cleaner, and after that we just used require method to load it in the functions.php
+require get_theme_file_path('/includes/search-route.php');
+
+// adding custom fields into our JSON file
+function university_custom_rest() {
+    register_rest_field('post', 'authorName', array(
+        'get_callback' => function() {return get_the_author();}
+    ));
+}
+
+add_action('rest_api_init', 'university_custom_rest');
+
+
 function university_files() {
 
     wp_enqueue_script('customJS', get_stylesheet_directory_uri() . '/js/custom.js', array('jquery'), '1.0.0', true);
@@ -12,6 +25,15 @@ function university_files() {
     wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
     // microtime() forcing style.css to load everytime we refresh site and stops cahcing of the site
     wp_enqueue_style('university_main_styles', get_stylesheet_uri(), NULL, microtime());
+
+    /* this is wordpress function that will let us output JS data into HTML source of the page 
+    - first argument is the script from which data will be handled
+    - second argument is our name of the javascript object
+    - third argument is the array with data itself
+    */
+    wp_localize_script('customJS', 'universityData', array(
+        'root_url' => get_site_url(),
+    ));
 
 }
 
