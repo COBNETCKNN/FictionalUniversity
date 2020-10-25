@@ -99,21 +99,45 @@ var Search = /*#__PURE__*/function () {
     value: function getResults() {
       var _this2 = this;
 
-      jQuery.when( // universityData.root_url is our way to make our JSON flexible so it gets the data no matter the url we are using
-      jQuery.getJSON(universityData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val()), jQuery.getJSON(universityData.root_url + '/wp-json/wp/v2/pages?search=' + this.searchField.val())).then(function (posts, pages) {
-        var combinedResults = posts[0].concat(pages[0]);
-
-        _this2.resultsDiv.html( // in order to put lines of HTML in our javascript code we use "backticks" to make that possible, between them we can put our HTML as we are used to ALT + 7 and it's called Template Literal
-        // ${posts.lenght} is ternary operator which allows us to write conditional statements inside our Template Literal
-        // .lenght is JS function which evaluates if there is anything in our array or object
-        "\n                <h2 class=\"search-overlay__section-title\">General Information</h2>\n                ".concat(combinedResults.length ? '<ul class="link-list min-list">' : '<p>No general information matches that search.</p>', "\n                ").concat(combinedResults.map(function (item) {
-          return "<li><a href=\"".concat(item.link, "\">").concat(item.title.rendered, "</a> ").concat(item.type == 'post' ? "by ".concat(item.authorName) : '', "</li>");
-        }).join(''), "\n                ").concat(combinedResults.length ? '</ul>' : '', "\n            "));
+      jQuery.getJSON(universityData.root_url + '/wp-json/university/v1/search?term=' + this.searchField.val(), function (results) {
+        _this2.resultsDiv.html("\n                <div class=\"grid grid-cols-3 gap-4\">\n                    <div class=\"\">\n                        <h2 class=\"search-overlay__section-title\">General Informations</h2>\n                        ".concat(results.generalInfo.length ? '<ul class="link-list min-list">' : '<p>No general information matches that search.</p>', "\n                        ").concat(results.generalInfo.map(function (item) {
+          return "<li><a href=\"".concat(item.url, "\">").concat(item.title, "</a> ").concat(item.postType == 'post' ? "by ".concat(item.authorName) : '', "</li>");
+        }).join(''), "\n                        ").concat(results.generalInfo.length ? '</ul>' : '', "\n                    </div>\n\n                    <div class=\"\">\n                        <h2 class=\"search-overlay__section-title\">Programs</h2>\n                        ").concat(results.programs.length ? '<ul class="link-list min-list">' : "<p>No programs match that search. <a href=\"".concat(universityData.root_url, "/programs\">View all programs.</a></p>"), "\n                        ").concat(results.programs.map(function (item) {
+          return "<li><a href=\"".concat(item.url, "\">").concat(item.title, "</a></li>");
+        }).join(''), "\n                        ").concat(results.programs.length ? '</ul>' : '', "\n\n                        <h2 class=\"search-overlay__section-title\">Professors</h2>\n                        ").concat(results.professors.length ? '<ul class="cotainer flex flex-wrap justify-start px-2">' : "<p>No professors match that search.</p>", "\n                        ").concat(results.professors.map(function (item) {
+          return "\n                            <li class=\"professor-card__list-item py-2\">\n                                <a class=\"professor-card\" href=\"".concat(item.url, "\">\n                                <img class=\"professor-card__image\" src=\"").concat(item.image, "\">\n                                <span class=\"professor-card__name\">").concat(item.title, "</span>\n                                </a>\n                            </li>\n                        ");
+        }).join(''), "\n                        ").concat(results.professors.length ? '</ul>' : '', "\n                    </div>\n\n                    <div class=\"\">\n                        <h2 class=\"search-overlay__section-title\">Campuses</h2>\n                        ").concat(results.campuses.length ? '<ul class="link-list min-list">' : "<p>No campuses match that search. <a href=\"".concat(universityData.root_url, "/campuses\">View all campuses.</a></p>"), "\n                        ").concat(results.campuses.map(function (item) {
+          return "<li><a href=\"".concat(item.url, "\">").concat(item.title, "</a></li>");
+        }).join(''), "\n                        ").concat(results.campuses.length ? '</ul>' : '', "\n\n                        <h2 class=\"search-overlay__section-title\">Events</h2>\n                        ").concat(results.events.length ? '' : "<p>No events match that search. <a href=\"".concat(universityData.root_url, "/events\">View all events.</a></p>"), "\n                        ").concat(results.events.map(function (item) {
+          return "\n                            <div class=\"event-summary\">\n                                <a class=\"event-summary__date t-center\" href=\"".concat(item.url, "\">\n                                    <span class=\"event-summary__month\">").concat(item.month, "</span>\n                                    <span class=\"event-summary__day\">").concat(item.day, "</span>\n                                </a>\n                                <div class=\"event-summary__content\">\n                                <h5 class=\"event-summary__title headline headline--tiny\"><a href=\"").concat(item.url, "\">").concat(item.title, "</a></h5>\n                                <p>\n                                    ").concat(item.description, "\n                                    <a href=\"").concat(item.url, "\" class=\"nu gray\">Learn more</a></p>\n                                </div>\n                            </div>\n                        ");
+        }).join(''), "\n                    </div>\n\n                </div>\n            "));
 
         _this2.isSpinnerVisible = false;
-      }, function () {
-        _this2.resultsDiv.html('<p>Unexpected Error please try again.</p>');
       });
+      /*
+      
+      Example of synchronus JSON request for data
+      
+              jQuery.when(
+                  // universityData.root_url is our way to make our JSON flexible so it gets the data no matter the url we are using
+                  jQuery.getJSON(universityData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val()), 
+                  jQuery.getJSON(universityData.root_url + '/wp-json/wp/v2/pages?search=' + this.searchField.val())
+                  ).then((posts, pages) => {
+                  var combinedResults = posts[0].concat(pages[0]);
+                      this.resultsDiv.html(
+                      // in order to put lines of HTML in our javascript code we use "backticks" to make that possible, between them we can put our HTML as we are used to ALT + 7 and it's called Template Literal
+                      // ${posts.lenght} is ternary operator which allows us to write conditional statements inside our Template Literal
+                      // .lenght is JS function which evaluates if there is anything in our array or object
+                      `
+                      <h2 class="search-overlay__section-title">General Information</h2>
+                      ${combinedResults.length ? '<ul class="link-list min-list">' : '<p>No general information matches that search.</p>'}
+                      ${combinedResults.map(item => `<li><a href="${item.link}">${item.title.rendered}</a> ${item.type == 'post' ? `by ${item.authorName}` : ''}</li>`).join('')}
+                      ${combinedResults.length ? '</ul>' : ''}
+                  `);
+                  this.isSpinnerVisible = false;
+              }, () => {
+                  this.resultsDiv.html('<p>Unexpected Error please try again.</p>');
+              }); */
     } // we made method with our template literal so our HTML gets loaded with javascript not from the footer.php, this method has to be loaded first, that's why we have to put it on first place in our constructor()
 
   }, {

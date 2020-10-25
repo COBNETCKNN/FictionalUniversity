@@ -79,6 +79,69 @@ class Search {
 
     getResults() {
 
+        jQuery.getJSON(universityData.root_url + '/wp-json/university/v1/search?term=' + this.searchField.val(), (results) => {
+            this.resultsDiv.html(`
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="">
+                        <h2 class="search-overlay__section-title">General Informations</h2>
+                        ${results.generalInfo.length ? '<ul class="link-list min-list">' : '<p>No general information matches that search.</p>'}
+                        ${results.generalInfo.map(item => `<li><a href="${item.url}">${item.title}</a> ${item.postType == 'post' ? `by ${item.authorName}` : ''}</li>`).join('')}
+                        ${results.generalInfo.length ? '</ul>' : ''}
+                    </div>
+
+                    <div class="">
+                        <h2 class="search-overlay__section-title">Programs</h2>
+                        ${results.programs.length ? '<ul class="link-list min-list">' : `<p>No programs match that search. <a href="${universityData.root_url}/programs">View all programs.</a></p>`}
+                        ${results.programs.map(item => `<li><a href="${item.url}">${item.title}</a></li>`).join('')}
+                        ${results.programs.length ? '</ul>' : ''}
+
+                        <h2 class="search-overlay__section-title">Professors</h2>
+                        ${results.professors.length ? '<ul class="cotainer flex flex-wrap justify-start px-2">' : `<p>No professors match that search.</p>`}
+                        ${results.professors.map(item => `
+                            <li class="professor-card__list-item py-2">
+                                <a class="professor-card" href="${item.url}">
+                                <img class="professor-card__image" src="${item.image}">
+                                <span class="professor-card__name">${item.title}</span>
+                                </a>
+                            </li>
+                        `).join('')}
+                        ${results.professors.length ? '</ul>' : ''}
+                    </div>
+
+                    <div class="">
+                        <h2 class="search-overlay__section-title">Campuses</h2>
+                        ${results.campuses.length ? '<ul class="link-list min-list">' : `<p>No campuses match that search. <a href="${universityData.root_url}/campuses">View all campuses.</a></p>`}
+                        ${results.campuses.map(item => `<li><a href="${item.url}">${item.title}</a></li>`).join('')}
+                        ${results.campuses.length ? '</ul>' : ''}
+
+                        <h2 class="search-overlay__section-title">Events</h2>
+                        ${results.events.length ? '' : `<p>No events match that search. <a href="${universityData.root_url}/events">View all events.</a></p>`}
+                        ${results.events.map(item => `
+                            <div class="event-summary">
+                                <a class="event-summary__date t-center" href="${item.url}">
+                                    <span class="event-summary__month">${item.month}</span>
+                                    <span class="event-summary__day">${item.day}</span>
+                                </a>
+                                <div class="event-summary__content">
+                                <h5 class="event-summary__title headline headline--tiny"><a href="${item.url}">${item.title}</a></h5>
+                                <p>
+                                    ${item.description}
+                                    <a href="${item.url}" class="nu gray">Learn more</a></p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                </div>
+            `);
+            this.isSpinnerVisible = false;
+        });
+
+
+/*
+
+Example of synchronus JSON request for data
+
         jQuery.when(
             // universityData.root_url is our way to make our JSON flexible so it gets the data no matter the url we are using
             jQuery.getJSON(universityData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val()), 
@@ -98,7 +161,7 @@ class Search {
             this.isSpinnerVisible = false;
         }, () => {
             this.resultsDiv.html('<p>Unexpected Error please try again.</p>');
-        });
+        }); */
     }
 
     // we made method with our template literal so our HTML gets loaded with javascript not from the footer.php, this method has to be loaded first, that's why we have to put it on first place in our constructor()
