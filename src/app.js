@@ -39,6 +39,8 @@ class Search {
         // making our search bar focus when user click on search icon so he can write what he wants right away
         setTimeout(() => this.searchField.focus(), 301);
         this.isOverlayOpen = true;
+        // reutnr false; will prevent default behaviour of a and li elements and in our case redirect non-JS users to our search page since we can't show them overlay we made
+        return false;
     }
 
     closeOverlay() {

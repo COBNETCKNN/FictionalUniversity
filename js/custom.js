@@ -51,7 +51,9 @@ var Search = /*#__PURE__*/function () {
       setTimeout(function () {
         return _this.searchField.focus();
       }, 301);
-      this.isOverlayOpen = true;
+      this.isOverlayOpen = true; // reutnr false; will prevent default behaviour of a and li elements and in our case redirect non-JS users to our search page since we can't show them overlay we made
+
+      return false;
     }
   }, {
     key: "closeOverlay",
