@@ -2,6 +2,8 @@
 
 pageBanner(array(
   'title' => 'Search Results',
+  // here we used esc_html(get_search_query(false)) function to pull what user has typed in search form and display it on our frontend
+  // &ldquo is " for left side, and &rdquo is " for right side
   'subtitle' => 'You searched for &ldquo;' . esc_html(get_search_query(false)) . '&rdquo;',
 ));
 ?>
@@ -13,6 +15,7 @@ pageBanner(array(
         while(have_posts()) {
         the_post(); 
         
+        // what we did her is that we used get_template_part() WP function which will pull HTML from our template-parts folder, which allowes us to customize style of different post types search results
             get_template_part('template-parts/content', get_post_type());
         }
             // making paginaton of posts
