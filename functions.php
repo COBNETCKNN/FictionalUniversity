@@ -149,3 +149,51 @@ function custom_field_excerpt() {
 	}
 	return apply_filters('the_excerpt', $text);
 }
+
+
+// redirect subscribers accounts out of the admin and onto the homepage
+function redirectSubsToFrontend() {
+    $ourCurrentUser = wp_get_current_user();
+
+    if(count($ourCurrentUser->roles) == 1 AND $ourCurrentUser->roles[0] == 'subscriber') {
+        wp_redirect(site_url('/'));
+        // telling wordpress to stop spinning gears after the upper funcion is completed
+        exit;
+    }
+}
+add_action('admin_init', 'redirectSubsToFrontend');
+
+
+// removing admin bar for users which have subscriber role
+function noSubsAdminBar() {
+    $ourCurrentUser = wp_get_current_user();
+
+    if(count($ourCurrentUser->roles) == 1 AND $ourCurrentUser->roles[0] == 'subscriber') {
+        show_admin_bar(false);
+    }
+}
+add_action('wp_loaded', 'noSubsAdminBar');
+
+
+
+
+// CUSTOMIZE LOGIN SCREEN
+function ourHeaderUrl() {
+    return esc_url(site_url('/'));
+}
+add_filter('login_headerurl', 'ourHeaderUrl');
+
+
+// enqueueing custom CSS and fonts for login page since it needs custom function to load it, to edit it all we have to do is to overwrite all the default WP styles
+function ourLoginCSS() {
+    wp_enqueue_style('university_main_styles', get_stylesheet_uri());
+    wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
+}
+add_action('login_enqueue_scripts', 'ourLoginCSS');
+
+
+// functions which outputs our name of the site on header of the login page
+function ourLoginTitle() {
+    return get_bloginfo('name');
+}
+add_filter('login_headertitle', 'ourLoginTitle');
