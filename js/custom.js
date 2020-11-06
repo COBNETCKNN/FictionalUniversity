@@ -51,7 +51,7 @@ var Search = /*#__PURE__*/function () {
       setTimeout(function () {
         return _this.searchField.focus();
       }, 301);
-      this.isOverlayOpen = true; // reutnr false; will prevent default behaviour of a and li elements and in our case redirect non-JS users to our search page since we can't show them overlay we made
+      this.isOverlayOpen = true; // return false; will prevent default behaviour of a and li elements and in our case redirect non-JS users to our search page since we can't show them overlay we made
 
       return false;
     }
@@ -67,7 +67,7 @@ var Search = /*#__PURE__*/function () {
   }, {
     key: "keyPressDispatcher",
     value: function keyPressDispatcher(e) {
-      if (e.keyCode == 83 && !this.isOverlayOpen && !jQuery("input, textareas").is(':focus')) {
+      if (e.keyCode == 83 && !this.isOverlayOpen && !jQuery("input, textarea").is(':focus')) {
         this.openOverlay();
       }
 
@@ -152,4 +152,138 @@ var Search = /*#__PURE__*/function () {
   return Search;
 }();
 
-var amazingSearch = new Search();
+var amazingSearch = new Search(); // JS for my notes page
+
+var myNotes = /*#__PURE__*/function () {
+  function myNotes() {
+    _classCallCheck(this, myNotes);
+
+    this.events();
+  }
+
+  _createClass(myNotes, [{
+    key: "events",
+    value: function events() {
+      jQuery("#my-notes").on("click", ".delete-note", this.deleteNote);
+      jQuery("#my-notes").on("click", ".edit-note", this.editNote.bind(this));
+      jQuery("#my-notes").on("click", ".update-note", this.updateNote.bind(this));
+      jQuery(".submit-note").on("click", this.createNote.bind(this));
+    } // Methods will go here
+    // EXAMPLE OF DELETE HTTP REQUEST    
+
+  }, {
+    key: "deleteNote",
+    value: function deleteNote(e) {
+      var thisNote = jQuery(e.target).parents("li");
+      jQuery.ajax({
+        beforeSend: function beforeSend(xhr) {
+          xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
+        },
+        url: universityData.root_url + '/wp-json/wp/v2/note/' + thisNote.data('id'),
+        type: 'DELETE',
+        success: function success(response) {
+          // what this will do is that it will use slideUp function which removes content from the page using animation, this way we don't need to refresh our page to see results of DELETE request we did
+          thisNote.slideUp();
+          console.log("Congrats");
+          console.log(response);
+        },
+        error: function error(response) {
+          console.log("Sorry");
+          console.log(response);
+        }
+      });
+    } // EXAMPLE OF EDIT NOTE HTTPS REQUEST
+
+  }, {
+    key: "editNote",
+    value: function editNote(e) {
+      var thisNote = jQuery(e.target).parents("li");
+
+      if (thisNote.data("state") == 'editable') {
+        // make read only
+        this.makeNoteReadOnly(thisNote);
+      } else {
+        // make editable
+        this.makeNoteEditable(thisNote);
+      }
+    }
+  }, {
+    key: "makeNoteEditable",
+    value: function makeNoteEditable(thisNote) {
+      thisNote.find(".edit-note").html('<i class="fa fa-times" aria-hidden="true"></i>Cancel');
+      thisNote.find(".note-title-field, .note-body-field").removeAttr("readonly").addClass("note-active-field");
+      thisNote.find(".update-note").addClass("update-note--visible");
+      thisNote.data("state", "editable");
+    }
+  }, {
+    key: "makeNoteReadOnly",
+    value: function makeNoteReadOnly(thisNote) {
+      thisNote.find(".edit-note").html('<i class="fa fa-pencil" aria-hidden="true"></i>Edit');
+      thisNote.find(".note-title-field, .note-body-field").attr("readonly", "readonly").removeClass("note-active-field");
+      thisNote.find(".update-note").removeClass("update-note--visible");
+      thisNote.data("state", "cancel");
+    } // UPDATE NOTE
+
+  }, {
+    key: "updateNote",
+    value: function updateNote(e) {
+      var _this3 = this;
+
+      var thisNote = jQuery(e.target).parents("li");
+      var ourUpdatedPost = {
+        'title': thisNote.find(".note-title-field").val(),
+        'content': thisNote.find(".note-body-field").val()
+      };
+      jQuery.ajax({
+        beforeSend: function beforeSend(xhr) {
+          xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
+        },
+        url: universityData.root_url + '/wp-json/wp/v2/note/' + thisNote.data('id'),
+        type: 'POST',
+        data: ourUpdatedPost,
+        success: function success(response) {
+          _this3.makeNoteReadOnly(thisNote);
+
+          console.log("Congrats");
+          console.log(response);
+        },
+        error: function error(response) {
+          console.log("Sorry");
+          console.log(response);
+        }
+      });
+    } // CREATE NEW NOTE
+
+  }, {
+    key: "createNote",
+    value: function createNote(e) {
+      var ourNewPosts = {
+        'title': jQuery(".new-note-title").val(),
+        'content': jQuery(".new-note-body").val(),
+        'status': 'publish'
+      };
+      jQuery.ajax({
+        beforeSend: function beforeSend(xhr) {
+          xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
+        },
+        url: universityData.root_url + '/wp-json/wp/v2/note/',
+        type: 'POST',
+        data: ourNewPosts,
+        success: function success(response) {
+          jQuery(".new-note-title, .new-note-body").val('');
+          jQuery("\n\n                    <li data-id=\"".concat(response.id, "\">\n                        <input readonly class=\"note-title-field\" value=\"").concat(response.title.raw, "\">\n                        <span class=\"edit-note\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>Edit</span>\n                        <span class=\"delete-note\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i>Delete</span>\n                        <textarea readonly class=\"note-body-field\">").concat(response.content.raw, "</textarea>\n                        <span class=\"update-note btn btn--blue btn--small\"><i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>Save</span>\n                    </li>\n\n                ")).prependTo("#my-notes").hide().slideDown();
+          console.log("Congrats");
+          console.log(response);
+        },
+        error: function error(response) {
+          console.log("Sorry");
+          console.log(response);
+        }
+      });
+    }
+  }]);
+
+  return myNotes;
+}();
+
+var mynotes = new myNotes();
