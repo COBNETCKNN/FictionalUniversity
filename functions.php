@@ -8,6 +8,11 @@ function university_custom_rest() {
     register_rest_field('post', 'authorName', array(
         'get_callback' => function() {return get_the_author();}
     ));
+
+    // adding new field to count user notes upon deleting one
+    register_rest_field('note', 'userNoteCount', array(
+        'get_callback' => function() {return count_user_posts(get_current_user_id(), 'note');}
+    ));
 }
 
 add_action('rest_api_init', 'university_custom_rest');
@@ -198,3 +203,26 @@ function ourLoginTitle() {
     return get_bloginfo('name');
 }
 add_filter('login_headertitle', 'ourLoginTitle');
+
+
+
+// CUSTOMIZING OUR NOTES CUSTOM POST TYPE
+add_filter('wp_insert_post_data', 'makeNotePrivate', 10, 2);
+function makeNotePrivate($data, $postarr) {
+// securing that our subscribers can't even use basic HTML in our inputs
+    if($data['post_type'] == 'note') {
+        // preventing our users from having more thatn 5 notes and using die() PHP function which shuts down everything
+        if(count_user_posts(get_current_user_id(), 'note') > 4 AND !$postarr['ID']) {
+            die("You have reached your note limit.");
+        }
+
+        $data['post_content'] = sanitize_textarea_field($data['post_content']);
+        $data['post_title'] = sanitize_text_field($data['post_title']);
+    }
+
+// force note posts to be private
+    if($data['post_type'] = 'note' AND $data['post_status'] != 'trash') {
+        $data['post_status'] = "private";
+    }
+    return $data;
+}

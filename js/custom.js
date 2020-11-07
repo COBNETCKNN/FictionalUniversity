@@ -185,7 +185,11 @@ var myNotes = /*#__PURE__*/function () {
           // what this will do is that it will use slideUp function which removes content from the page using animation, this way we don't need to refresh our page to see results of DELETE request we did
           thisNote.slideUp();
           console.log("Congrats");
-          console.log(response);
+          console.log(response); // if statement which as a condition uses our new JSON field which counts user notes to remove class from our message and make it hidden again
+
+          if (response.userNoteCount < 5) {
+            jQuery(".note-limit-message").removeClass("active");
+          }
         },
         error: function error(response) {
           console.log("Sorry");
@@ -276,6 +280,11 @@ var myNotes = /*#__PURE__*/function () {
           console.log(response);
         },
         error: function error(response) {
+          // if statement which will fire if in our JSON object there is custom message we made in function.php for reaching limit of notes
+          if (response.responseText == "You have reached your note limit.") {
+            jQuery(".note-limit-message").addClass("active");
+          }
+
           console.log("Sorry");
           console.log(response);
         }

@@ -225,6 +225,10 @@ class myNotes {
                 thisNote.slideUp();
                 console.log("Congrats");
                 console.log(response);
+                // if statement which as a condition uses our new JSON field which counts user notes to remove class from our message and make it hidden again
+                if(response.userNoteCount < 5) {
+                    jQuery(".note-limit-message").removeClass("active");
+                }
             },
             error: (response) => {
                 console.log("Sorry");
@@ -324,6 +328,10 @@ class myNotes {
                 console.log(response);
             },
             error: (response) => {
+                // if statement which will fire if in our JSON object there is custom message we made in function.php for reaching limit of notes
+                if(response.responseText == "You have reached your note limit.") {
+                    jQuery(".note-limit-message").addClass("active");
+                }
                 console.log("Sorry");
                 console.log(response);
             },
