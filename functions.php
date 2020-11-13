@@ -3,6 +3,9 @@
 // we made seperate .php file in our includes folder so our code looks cleaner, and after that we just used require method to load it in the functions.php
 require get_theme_file_path('/includes/search-route.php');
 
+// creating custom POST and DELETE endpoints for likes of professors
+require get_theme_file_path('/includes/like-route.php');
+
 // adding custom fields into our JSON file
 function university_custom_rest() {
     register_rest_field('post', 'authorName', array(
@@ -209,20 +212,21 @@ add_filter('login_headertitle', 'ourLoginTitle');
 // CUSTOMIZING OUR NOTES CUSTOM POST TYPE
 add_filter('wp_insert_post_data', 'makeNotePrivate', 10, 2);
 function makeNotePrivate($data, $postarr) {
-// securing that our subscribers can't even use basic HTML in our inputs
-    if($data['post_type'] == 'note') {
-        // preventing our users from having more thatn 5 notes and using die() PHP function which shuts down everything
-        if(count_user_posts(get_current_user_id(), 'note') > 4 AND !$postarr['ID']) {
-            die("You have reached your note limit.");
-        }
-
-        $data['post_content'] = sanitize_textarea_field($data['post_content']);
-        $data['post_title'] = sanitize_text_field($data['post_title']);
+    // securing that our subscribers can't even use basic HTML in our inputs
+  if ($data['post_type'] == 'note') {
+    // preventing our users from having more thatn 5 notes and using die() PHP function which shuts down everything
+    if(count_user_posts(get_current_user_id(), 'note') > 4 AND !$postarr['ID']) {
+      die("You have reached your note limit.");
     }
 
-// force note posts to be private
-    if($data['post_type'] = 'note' AND $data['post_status'] != 'trash') {
-        $data['post_status'] = "private";
-    }
-    return $data;
+    $data['post_content'] = sanitize_textarea_field($data['post_content']);
+    $data['post_title'] = sanitize_text_field($data['post_title']);
+  }
+
+  // force note posts to be private
+  if($data['post_type'] == 'note' AND $data['post_status'] != 'trash') {
+    $data['post_status'] = "private";
+  }
+  
+  return $data;
 }

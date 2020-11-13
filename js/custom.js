@@ -296,3 +296,65 @@ var myNotes = /*#__PURE__*/function () {
 }();
 
 var mynotes = new myNotes();
+
+var Like = /*#__PURE__*/function () {
+  function Like() {
+    _classCallCheck(this, Like);
+
+    this.events();
+  }
+
+  _createClass(Like, [{
+    key: "events",
+    value: function events() {
+      jQuery(".like-box").on("click", this.ourClickDispatcher.bind(this));
+    } // methods
+
+  }, {
+    key: "ourClickDispatcher",
+    value: function ourClickDispatcher(e) {
+      var currentLikeBox = jQuery(e.target).closest(".like-box");
+
+      if (currentLikeBox.data('exists') == 'yes') {
+        this.deleteLike(currentLikeBox);
+      } else {
+        this.createLike(currentLikeBox);
+      }
+    }
+  }, {
+    key: "createLike",
+    value: function createLike(currentLikeBox) {
+      jQuery.ajax({
+        url: universityData.root_url + '/wp-json/university/v1/manageLike',
+        type: 'POST',
+        data: {
+          'professorId': currentLikeBox.data('professor')
+        },
+        success: function success(response) {
+          console.log(response);
+        },
+        error: function error(response) {
+          console.log(response);
+        }
+      });
+    }
+  }, {
+    key: "deleteLike",
+    value: function deleteLike(currentLikeBox) {
+      jQuery.ajax({
+        url: universityData.root_url + '/wp-json/university/v1/manageLike',
+        type: 'DELETE',
+        success: function success(response) {
+          console.log(response);
+        },
+        error: function error(response) {
+          console.log(response);
+        }
+      });
+    }
+  }]);
+
+  return Like;
+}();
+
+var likes = new Like();
