@@ -176,6 +176,7 @@ var myNotes = /*#__PURE__*/function () {
     value: function deleteNote(e) {
       var thisNote = jQuery(e.target).parents("li");
       jQuery.ajax({
+        // WP nonce which helps us to help protect URLs and forms from certain types of misuse, malicious or otherwise.
         beforeSend: function beforeSend(xhr) {
           xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
         },
@@ -315,7 +316,7 @@ var Like = /*#__PURE__*/function () {
     value: function ourClickDispatcher(e) {
       var currentLikeBox = jQuery(e.target).closest(".like-box");
 
-      if (currentLikeBox.data('exists') == 'yes') {
+      if (currentLikeBox.attr('data-exists') == 'yes') {
         this.deleteLike(currentLikeBox);
       } else {
         this.createLike(currentLikeBox);
@@ -325,12 +326,21 @@ var Like = /*#__PURE__*/function () {
     key: "createLike",
     value: function createLike(currentLikeBox) {
       jQuery.ajax({
+        // WP nonce which helps us to help protect URLs and forms from certain types of misuse, malicious or otherwise.
+        beforeSend: function beforeSend(xhr) {
+          xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
+        },
         url: universityData.root_url + '/wp-json/university/v1/manageLike',
         type: 'POST',
         data: {
           'professorId': currentLikeBox.data('professor')
         },
         success: function success(response) {
+          currentLikeBox.attr('data-exists', 'yes');
+          var likeCount = parseInt(currentLikeBox.find(".like-count").html(), 10);
+          likeCount++;
+          currentLikeBox.find(".like-count").html(likeCount);
+          currentLikeBox.attr('data-like', response);
           console.log(response);
         },
         error: function error(response) {
@@ -342,9 +352,20 @@ var Like = /*#__PURE__*/function () {
     key: "deleteLike",
     value: function deleteLike(currentLikeBox) {
       jQuery.ajax({
+        beforeSend: function beforeSend(xhr) {
+          xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
+        },
         url: universityData.root_url + '/wp-json/university/v1/manageLike',
+        data: {
+          'like': currentLikeBox.attr('data-like')
+        },
         type: 'DELETE',
         success: function success(response) {
+          currentLikeBox.attr('data-exists', 'no');
+          var likeCount = parseInt(currentLikeBox.find(".like-count").html(), 10);
+          likeCount--;
+          currentLikeBox.find(".like-count").html(likeCount);
+          currentLikeBox.attr('data-like', '');
           console.log(response);
         },
         error: function error(response) {
