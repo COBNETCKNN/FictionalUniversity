@@ -104,22 +104,20 @@ var Search = /*#__PURE__*/function () {
       jQuery.getJSON(universityData.root_url + '/wp-json/university/v1/search?term=' + this.searchField.val(), function (results) {
         _this2.resultsDiv.html("\n                <div class=\"grid grid-cols-3 gap-4\">\n                    <div class=\"\">\n                        <h2 class=\"search-overlay__section-title\">General Informations</h2>\n                        ".concat(results.generalInfo.length ? '<ul class="link-list min-list">' : '<p>No general information matches that search.</p>', "\n                        ").concat(results.generalInfo.map(function (item) {
           return "<li><a href=\"".concat(item.url, "\">").concat(item.title, "</a> ").concat(item.postType == 'post' ? "by ".concat(item.authorName) : '', "</li>");
-        }).join(''), "\n                        ").concat(results.generalInfo.length ? '</ul>' : '', "\n                    </div>\n\n                    <div class=\"\">\n                        <h2 class=\"search-overlay__section-title\">Programs</h2>\n                        ").concat(results.programs.length ? '<ul class="link-list min-list">' : "<p>No programs match that search. <a href=\"".concat(universityData.root_url, "/programs\">View all programs.</a></p>"), "\n                        ").concat(results.programs.map(function (item) {
+        }).join(''), "\n                        ").concat(results.generalInfo.length ? '</ul>' : '', "\n                    </div>\n                    <div class=\"\">\n                        <h2 class=\"search-overlay__section-title\">Programs</h2>\n                        ").concat(results.programs.length ? '<ul class="link-list min-list">' : "<p>No programs match that search. <a href=\"".concat(universityData.root_url, "/programs\">View all programs.</a></p>"), "\n                        ").concat(results.programs.map(function (item) {
           return "<li><a href=\"".concat(item.url, "\">").concat(item.title, "</a></li>");
-        }).join(''), "\n                        ").concat(results.programs.length ? '</ul>' : '', "\n\n                        <h2 class=\"search-overlay__section-title\">Professors</h2>\n                        ").concat(results.professors.length ? '<ul class="cotainer flex flex-wrap justify-start px-2">' : "<p>No professors match that search.</p>", "\n                        ").concat(results.professors.map(function (item) {
+        }).join(''), "\n                        ").concat(results.programs.length ? '</ul>' : '', "\n                        <h2 class=\"search-overlay__section-title\">Professors</h2>\n                        ").concat(results.professors.length ? '<ul class="cotainer flex flex-wrap justify-start px-2">' : "<p>No professors match that search.</p>", "\n                        ").concat(results.professors.map(function (item) {
           return "\n                            <li class=\"professor-card__list-item py-2\">\n                                <a class=\"professor-card\" href=\"".concat(item.url, "\">\n                                <img class=\"professor-card__image\" src=\"").concat(item.image, "\">\n                                <span class=\"professor-card__name\">").concat(item.title, "</span>\n                                </a>\n                            </li>\n                        ");
-        }).join(''), "\n                        ").concat(results.professors.length ? '</ul>' : '', "\n                    </div>\n\n                    <div class=\"\">\n                        <h2 class=\"search-overlay__section-title\">Campuses</h2>\n                        ").concat(results.campuses.length ? '<ul class="link-list min-list">' : "<p>No campuses match that search. <a href=\"".concat(universityData.root_url, "/campuses\">View all campuses.</a></p>"), "\n                        ").concat(results.campuses.map(function (item) {
+        }).join(''), "\n                        ").concat(results.professors.length ? '</ul>' : '', "\n                    </div>\n                    <div class=\"\">\n                        <h2 class=\"search-overlay__section-title\">Campuses</h2>\n                        ").concat(results.campuses.length ? '<ul class="link-list min-list">' : "<p>No campuses match that search. <a href=\"".concat(universityData.root_url, "/campuses\">View all campuses.</a></p>"), "\n                        ").concat(results.campuses.map(function (item) {
           return "<li><a href=\"".concat(item.url, "\">").concat(item.title, "</a></li>");
-        }).join(''), "\n                        ").concat(results.campuses.length ? '</ul>' : '', "\n\n                        <h2 class=\"search-overlay__section-title\">Events</h2>\n                        ").concat(results.events.length ? '' : "<p>No events match that search. <a href=\"".concat(universityData.root_url, "/events\">View all events.</a></p>"), "\n                        ").concat(results.events.map(function (item) {
+        }).join(''), "\n                        ").concat(results.campuses.length ? '</ul>' : '', "\n                        <h2 class=\"search-overlay__section-title\">Events</h2>\n                        ").concat(results.events.length ? '' : "<p>No events match that search. <a href=\"".concat(universityData.root_url, "/events\">View all events.</a></p>"), "\n                        ").concat(results.events.map(function (item) {
           return "\n                            <div class=\"event-summary\">\n                                <a class=\"event-summary__date t-center\" href=\"".concat(item.url, "\">\n                                    <span class=\"event-summary__month\">").concat(item.month, "</span>\n                                    <span class=\"event-summary__day\">").concat(item.day, "</span>\n                                </a>\n                                <div class=\"event-summary__content\">\n                                <h5 class=\"event-summary__title headline headline--tiny\"><a href=\"").concat(item.url, "\">").concat(item.title, "</a></h5>\n                                <p>\n                                    ").concat(item.description, "\n                                    <a href=\"").concat(item.url, "\" class=\"nu gray\">Learn more</a></p>\n                                </div>\n                            </div>\n                        ");
-        }).join(''), "\n                    </div>\n\n                </div>\n            "));
+        }).join(''), "\n                    </div>\n                </div>\n            "));
 
         _this2.isSpinnerVisible = false;
       });
       /*
-      
       Example of synchronus JSON request for data
-      
               jQuery.when(
                   // universityData.root_url is our way to make our JSON flexible so it gets the data no matter the url we are using
                   jQuery.getJSON(universityData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val()), 
@@ -145,14 +143,14 @@ var Search = /*#__PURE__*/function () {
   }, {
     key: "addSearchHTML",
     value: function addSearchHTML() {
-      jQuery("body").append("\n            <div class=\"search-overlay\">\n                <div class=\"search-overlay__top\">\n                    <div class=\"container\">\n                    <i class=\"fa fa-search search-overlay__icon\" aria-hidden=\"true\"></i>\n                    <input type=\"text\" class=\"search-term\" placeholder=\"What are you looking for?\" id=\"search-term\">\n                    <i class=\"fa fa-window-close search-overlay__close\" aria-hidden=\"true\"></i>\n                    </div>\n                </div>\n\n                <div class=\"container\">\n                    <div id=\"search-overlay__results\">\n                    </div>\n                </div>\n\n            </div>\n        ");
+      jQuery("body").append("\n            <div class=\"search-overlay\">\n                <div class=\"search-overlay__top\">\n                    <div class=\"container\">\n                    <i class=\"fa fa-search search-overlay__icon\" aria-hidden=\"true\"></i>\n                    <input type=\"text\" class=\"search-term\" placeholder=\"What are you looking for?\" id=\"search-term\">\n                    <i class=\"fa fa-window-close search-overlay__close\" aria-hidden=\"true\"></i>\n                    </div>\n                </div>\n                <div class=\"container\">\n                    <div id=\"search-overlay__results\">\n                    </div>\n                </div>\n            </div>\n        ");
     }
   }]);
 
   return Search;
 }();
 
-var amazingSearch = new Search(); // JS for my notes page
+var amazingSearch = new Search();
 
 var myNotes = /*#__PURE__*/function () {
   function myNotes() {
@@ -276,7 +274,7 @@ var myNotes = /*#__PURE__*/function () {
         data: ourNewPosts,
         success: function success(response) {
           jQuery(".new-note-title, .new-note-body").val('');
-          jQuery("\n\n                    <li data-id=\"".concat(response.id, "\">\n                        <input readonly class=\"note-title-field\" value=\"").concat(response.title.raw, "\">\n                        <span class=\"edit-note\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>Edit</span>\n                        <span class=\"delete-note\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i>Delete</span>\n                        <textarea readonly class=\"note-body-field\">").concat(response.content.raw, "</textarea>\n                        <span class=\"update-note btn btn--blue btn--small\"><i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>Save</span>\n                    </li>\n\n                ")).prependTo("#my-notes").hide().slideDown();
+          jQuery("\n                    <li data-id=\"".concat(response.id, "\">\n                        <input readonly class=\"note-title-field\" value=\"").concat(response.title.raw, "\">\n                        <span class=\"edit-note\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>Edit</span>\n                        <span class=\"delete-note\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i>Delete</span>\n                        <textarea readonly class=\"note-body-field\">").concat(response.content.raw, "</textarea>\n                        <span class=\"update-note btn btn--blue btn--small\"><i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>Save</span>\n                    </li>\n                ")).prependTo("#my-notes").hide().slideDown();
           console.log("Congrats");
           console.log(response);
         },

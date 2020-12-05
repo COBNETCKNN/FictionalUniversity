@@ -17,8 +17,16 @@ mix.options({
     postCss: [tailwindcss('./tailwind.config.js')],
     })
 
-    .js('src/app.js', 'js/custom.js')
-    .babel('src/app.js', 'js/custom.js')
+    .js([
+        './js/modules/Search.js',
+        './js/modules/Notes.js',
+        './js/modules/Likes.js'
+    ], 'js/custom.js')
+    .babel([
+        './js/modules/Search.js',
+        './js/modules/Notes.js',
+        './js/modules/Likes.js'
+    ], 'js/custom.js')
     .sass('src/app.scss', 'css/custom.css');
 
 mix.browserSync({

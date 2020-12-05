@@ -8,9 +8,9 @@
 ?>
 
 
-
-<div class="page-banner">
-      <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/library-hero.jpg')?>);"></div>
+  <div class="page-banner">
+      <!-- added featured image from home page to display as a page banner, and made it dynamic with pageBanner size defiend in functions.php -->
+      <div class="page-banner__bg-image" style="background-image: url(<?php echo get_the_post_thumbnail_url(null, 'pageBanner'); ?>"></div>
       <div class="page-banner__content container t-center c-white">
         <h1 class="headline headline--large">Welcome!</h1>
         <h2 class="headline headline--medium">We think you&rsquo;ll like it here.</h2>
@@ -134,36 +134,35 @@
 
     
 
-
+<!-- DYNAMIC SLIDER -->
     <?php if( have_rows('slider') ): ?>
 
-    
       <div class="hero-slider">
-      <div class="slider__bullets glide__bullets" data-glide-el="controls[nav]"></div>
-        <div data-glide-el="track" class="glide__track">
-          <div class="glide__slides">
-            
+        <div class="slider__bullets glide__bullets" data-glide-el="controls[nav]"></div>
+          <div data-glide-el="track" class="glide__track">
+            <div class="glide__slides">            
 
     <?php while( have_rows('slider') ): the_row(); 
         $image = get_sub_field('picture');
         ?>
       
-          <div class="hero-slider__slide" style="background-image: url(<?php echo $image?>);">
-            <div class="hero-slider__interior container">
-              <div class="hero-slider__overlay">
-                <h2 class="headline headline--medium t-center"><?php echo get_sub_field('title'); ?></h2>
-                <p class="t-center"><?php echo get_sub_field('subtitle'); ?></p>
-                <p class="t-center no-margin"><a href="#" class="btn btn--blue">Learn more</a></p>
+            <div class="hero-slider__slide" style="background-image: url(<?php echo $image?>);">
+              <div class="hero-slider__interior container">
+                <div class="hero-slider__overlay">
+                  <h2 class="headline headline--medium t-center"><?php echo get_sub_field('title'); ?></h2>
+                  <p class="t-center"><?php echo get_sub_field('subtitle'); ?></p>
+                  <p class="t-center no-margin"><a href="#" class="btn btn--blue">Learn more</a></p>
+                </div>
               </div>
             </div>
-          </div>
         
     <?php endwhile; ?>
 
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
 <?php endif; ?>
+
 
 <?php get_footer(); ?>
